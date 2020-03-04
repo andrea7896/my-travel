@@ -1,0 +1,25 @@
+.bodyLogin{
+  background-image: url('./assets/login/giphy.gif') ;
+  height: 100vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  
+}
+
+.divLogin{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.loginForm{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:20px;
+  background-color:white;
+  border-radius:50px;
+  align-items:center
+}
