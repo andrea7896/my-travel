@@ -1,0 +1,7 @@
+.bodyMain{
+    background-image: url('../../assets/mountain2.png') ;
+    height: 600px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}

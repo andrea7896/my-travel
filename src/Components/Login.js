@@ -3,6 +3,8 @@ import { GlobalContext } from './GlobalContextProvider';
 import { TextField, Grid} from '@material-ui/core';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Row,Col,Container,Button} from 'reactstrap';
+import * as ReactStrap from 'reactstrap';
+import MaterialButton from '@material-ui/core/Button';
 import '../index.css';
 
 
@@ -31,7 +33,7 @@ export const Login = () => {
     return <body className="bodyLogin">
     <Container className="divLogin">
             <Grid xs={6}>
-                <h1>My travel</h1>
+                <h1>My travels</h1>
                 <h6>Get started making good memories</h6>
             </Grid>
             <Grid xs={6} className="loginForm">
@@ -53,8 +55,11 @@ export const Login = () => {
             <Button style={{marginLeft:20}} color="primary" disabled={userInput === "" || passwordInput === ""}
             onClick={checkInput}>Login</Button>
            </Row>
-           </Grid>
 
+           
+           </Grid>
+           <ReactStrap.Button>Ramiro</ReactStrap.Button>
+            <MaterialButton>Ramiro2</MaterialButton>
             
             
     </Container>
