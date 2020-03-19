@@ -1,0 +1,19 @@
+@fontface {
+    font-family: 'Poppins', sans-serif;
+    src: url('https://fonts.googleapis.com/css?family=Poppins&display=swap')
+  }
+
+.my-navbar{
+    background-color: #0F4C81;
+}
+
+.navLink{
+    font-family: 'Poppins', sans-serif ;
+    color: white;
+    text-decoration: none;
+}
+
+.zoomLogo:hover{
+    transition: transform .2s;
+    transform: scale(1.3);
+}

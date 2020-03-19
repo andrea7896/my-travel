@@ -1,0 +1,100 @@
+@font-face {
+    font-family: 'Noto Sans', sans-serif;
+    src: url('https://fonts.googleapis.com/css?family=Noto+Sans&display=swap');
+}
+@font-face {
+    font-family: 'Raleway', sans-serif;
+    src: url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
+}
+
+
+.bodyMain{
+    background-image: url('../../assets/mountain2.png') ;
+    height: 450px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display:flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items:center;
+}
+
+.titleSearch{
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+
+.search-form{
+    display: inline-flex;
+}
+
+.btnEmotions{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-around,center;
+    text-align: center;
+    align-items: center;
+    font-family: 'Raleway', sans-serif;
+    font-weight: bold;
+}
+
+.btnContainer{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.outer-div{
+    height: 150px;
+    width: 150px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.inner-div{
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: all 0.5s ease;
+}
+
+.inner-div:hover{
+    transform:scale(1.2);
+}
+
+p{
+    font-family: 'Raleway', sans-serif;
+    font-size: 18px;
+}
+.body-content{
+    margin: 20px;
+}
+
+
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .search-form{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .search-fcontainer{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .btn-Search{
+        width: 100px;
+        margin:5px;
+        border-radius: 12px;
+    }
+}
+
+
+
