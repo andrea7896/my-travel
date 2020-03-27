@@ -14,14 +14,24 @@ import axios from 'axios';
 //export default = ()
 export const Login = ({history}) => {
 
-    const {generalSettings,login,isLogged}= React.useContext(GlobalContext);
+    var {generalSettings,login,isLogged,setLogged} = React.useContext(GlobalContext);
+    
     
     const [userInput,setUser]=React.useState("");
     const [passwordInput,setPassword]=React.useState("");
-       
-    function checkInput(){
-        login(userInput,passwordInput);
-        history.push('/reservas');
+    const [error,setError]=React.useState(false);
+    async function checkInput(){
+      const result = await login(userInput,passwordInput,setLogged);
+
+       console.log("HEY",result);
+        if(result != undefined){
+            setError(false);
+            console.log("HEY BB",isLogged);
+            history.push('/reservas');
+        }else{
+            console.log(isLogged)
+            setError(true);
+        }
     }
 
     var onChangeTextField = setter => ({target}) => setter(target.value);
@@ -39,6 +49,7 @@ export const Login = ({history}) => {
             </Row>
             <br></br>
             <Row>
+             
             <TextField id="outlined-basic" label="User" variant="outlined" onChange={onChangeTextField(setUser)} />
             </Row>
             <br></br>

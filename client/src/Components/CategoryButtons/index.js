@@ -33,16 +33,10 @@ class CategoryButtons extends Component{
     }
     
     getByCategory = e => {
-        console.log(this.props);
+        console.log("este es el console",this.props);
         e.preventDefault();
         const v = e.currentTarget.dataset.div_id;
-       
-        if(this.props.history.location == "/busquedas"){
-          console.log("ya tiene")
-        }else{
-          this.props.history.push("/busquedas",{ id: v });
-        }
-        
+        this.props.history.push(`/busquedas/${v}`);
       };
     
     render(){

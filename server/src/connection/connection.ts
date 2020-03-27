@@ -6,6 +6,7 @@ const con = mysql.createConnection({
         user: constants.user,
         password: constants.password,
         database: constants.database,
+        port:3306,
         multipleStatements:constants.multipleStatements
       });
 

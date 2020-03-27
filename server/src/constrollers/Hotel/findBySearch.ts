@@ -5,8 +5,9 @@ export default (req:Request,res:Response) => {
     const startDate = req.query.startDate;
     const endDate = req.query.endDate;
 
-    con.query(`SELECT hotel.*,cities.stateName,cities.cityName FROM hotel INNER JOIN cities 
-        ON hotel.idCity = cities.idCity WHERE UPPER(cities.cityName) = "${city}" AND hotel.start_date = "${startDate}" AND hotel.end_date = "${endDate}";`,
+    con.query(`SELECT hotel.*,cities.stateName,cities.cityName,stars.*,category.* FROM hotel INNER JOIN cities 
+    ON hotel.idCity = cities.idCity INNER JOIN stars ON hotel.rate = stars.idRate INNER JOIN category ON hotel.idCategory = category.idCategory
+    WHERE(UPPER(cities.cityName) = "${city}" AND hotel.start_date = "${startDate}" AND hotel.end_date = "${endDate}");`,
         function(err,result,fields){
             if(err) throw err;
             if(result.length == 0){

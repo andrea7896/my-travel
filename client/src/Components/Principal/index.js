@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Image from "react-bootstrap/Image";
+import logo from "../../assets/mytravel.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faStar } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -8,7 +9,7 @@ import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
 import { DateRangePicker } from "react-dates";
 import { withRouter } from "react-router-dom";
-import {formatter} from "../../assets/Constants/constants.js";
+import { formatter } from "../../assets/Constants/constants.js";
 import CategoryButtons from "../CategoryButtons/index";
 import {
   Row,
@@ -23,7 +24,9 @@ import {
   CardTitle,
   CardSubtitle,
   Form,
-  FormGroup
+  FormGroup,
+  Alert,
+  FormFeedback
 } from "reactstrap";
 
 import fuji from "../../assets/fuji.jpg";
@@ -39,80 +42,77 @@ class Principal extends Component {
     this.state = {
       city: "",
       destacados: [],
+      cityExist: true,
+      inputValid: false,
       startDate: "",
       endDate: "",
       parent: this
     };
   }
 
-  getDestacados = () => {
+  componentWillMount(){
     axios
-      .get("http://localhost:9001/hotel/getDestacados")
-      .then(response => this.setState({ destacados: response.data }))
-      .catch(err => console.log(err));
-  };
-
+    .get("http://localhost:9002/hotel/getDestacados")
+    .then(response => this.setState({ destacados: response.data }))
+    .catch(err => console.log(err));
+  }
   getBySearch = () => {
-    var { startDate, endDate } = this.state;
+    var { startDate, endDate, city } = this.state;
     const parent = this;
 
-    axios
-      .get("http://localhost:9001/hotel/findSearch", {
-        params: {
-          startDate: moment(startDate).format("YYYY-MM-DD"),
-          endDate: moment(endDate).format("YYYY-MM-DD"),
-          city: this.state.city.toUpperCase()
-        }
+    if(city != "" && startDate != "" && endDate != ""){
+    parent.props.history.push("/busquedas", {
+      startDate: moment(startDate).format("YYYY-MM-DD"),
+      endDate: moment(endDate).format("YYYY-MM-DD"),
+      city: city.toUpperCase()
+    });
+    }else{
+      parent.setState({
+        cityExist:false,
+        inputValid:true
       })
-      .then(function(response) {
-        parent.props.history.push("/busquedas", { data: response.data });
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+    }
   };
 
   onTextChange = e => {
     const city = e.target.value;
+    if(city != ""){ 
     this.setState({
-      city
+      city,
+      inputValid:false,
+      cityExist:true
     });
+    }
     console.log(this.state.city);
   };
 
-  showDetails = (e,id) => {
+  showDetails = (e, element) => {
     e.preventDefault();
-  this.props.history.push('/details/'+id);
-  }
-
-  
+    this.props.history.push("/details/" + element.idHotel, { element });
+  };
 
   render() {
-    {
-      if (this.state.destacados.length == 0) {
-        this.getDestacados();
-      }
-    }
-
-    console.log(this.state.destacados)
-
     return (
       <body>
         <div className="bodyMain">
           <div>
-            <Row>
+            <Row className="RowContainer">
               <h1 className="titleSearch">A dónde vamos el dia de hoy ?</h1>
             </Row>
-            <Row className="search-fcontainer">
+            <Row className="search-fcontainer RowContainer">
               <div className="search-form">
                 <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                  <Input
-                    type="text"
+                  <Input invalid={this.state.inputValid}
+                    type="Search"
+                    size="lg"
                     placeholder="City"
                     onChange={this.onTextChange}
                   />
+                  {!this.state.cityExist && <Alert className="alertSearch" color="danger">Oh no! Completa tu búsqueda.</Alert>
+                  }
                 </FormGroup>
-                <DateRangePicker
+                
+                <DateRangePicker required
                   startDate={this.state.startDate} // momentPropTypes.momentObj or null,
                   startDateId="your_unique_start_date_id" // PropTypes.string.isRequired,
                   endDate={this.state.endDate} // momentPropTypes.momentObj or null,
@@ -165,22 +165,45 @@ class Principal extends Component {
                 padding: "10px"
               }}
             >
-              <Card style={{ width: "18rem", height: "auto" }}>
+              <Card className="cardHotel"
+                style={{ width: "18rem", height: "auto", alignItems: "center" }}
+              >
                 <CardImg
                   top
                   style={{ width: "18rem", height: 250 }}
-                  src={x.imgPrincipal}
+                  src={x.imgPrincipal || logo}
                   alt="Card image cap"
                 />
                 <CardBody>
-                  <CardTitle> {x.title} </CardTitle>
-                  <CardSubtitle> {x.description} </CardSubtitle>
-                  <CardText><i>Price:</i><i style={{textDecoration:"line-through"}}>${x.price*.20+x.price}</i></CardText>
-                  <CardText><i style={{fontSize:"25px"}}>{formatter.format(x.price)}</i></CardText> 
-                  <Row style={{display:"flex"}}>
-                  <i>Rate: </i>{renderRate(x.rate)}
-                  </Row> 
-                  <Button color="danger" onClick={e => {this.showDetails(e,x.idHotel)}}> Ver más </Button>
+                  <CardText>
+                    {x.title}
+                    <Row style={{ display: "flex", margin: "auto" }}>
+                      {renderRate(x.rate)}
+                    </Row>
+                  </CardText>
+                  <CardSubtitle> {
+                  (x.description).substr(0,100)
+                  }...</CardSubtitle>
+                  <CardText>
+                    <i>MXN </i>
+                    <i style={{ textDecoration: "line-through" }}>
+                      {formatter.format(x.price * 0.2 + x.price)}
+                    </i>
+                  </CardText>
+                  <CardText>
+                    <i style={{ fontSize: "25px", color: "#fe4c50" }}>
+                      MXN {formatter.format(x.price)}
+                    </i>
+                  </CardText>
+                  <Button
+                    color="danger"
+                    onClick={e => {
+                      this.showDetails(e, x);
+                    }}
+                  >
+                    {" "}
+                    Ver más{" "}
+                  </Button>
                 </CardBody>
               </Card>
             </Col>
@@ -191,14 +214,16 @@ class Principal extends Component {
   }
 }
 
-const renderRate = (rate) => {
-  console.log(rate);
+const renderRate = rate => {
   var starts = new Array();
-    for(let i=1;i<=rate;i++){
-       starts.push(<><FontAwesomeIcon icon={faStar} color="yellow"></FontAwesomeIcon></>);
-    }
-    return starts;
+  for (let i = 1; i <= rate; i++) {
+    starts.push(
+      <>
+        <FontAwesomeIcon icon={faStar} color="#ffcd59"></FontAwesomeIcon>
+      </>
+    );
+  }
+  return starts;
 };
 
 export default withRouter(Principal);
-

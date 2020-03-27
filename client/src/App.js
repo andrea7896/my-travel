@@ -5,7 +5,7 @@ import './index.css';
 import {BrowserRouter as Router,
 Switch,Route} from "react-router-dom";
 import Menu from "./Components/Menu"
-import {GlobalContextProvider} from './Components/GlobalContextProvider';
+import {GlobalContextProvider, GlobalContext} from './Components/GlobalContextProvider';
 
 import Login from './Components/Login';
 import Puntos from './Components/Puntos';
@@ -15,21 +15,30 @@ import Principal from './Components/Principal';
 import Details from './Components/Detalles';
 
 
-function App() {
-  return <Router>
-    <Menu></Menu>
 
+
+function App() {
+  
+  return <Router>
+    <GlobalContextProvider>
+    <Menu></Menu>
+    </GlobalContextProvider>
+  
     <Switch>
-      <Route path="/busquedas">
-        <Busquedas></Busquedas>
+      <Route path="/busquedas/:idCategory" exact={false}>
+        <Busquedas/>
+      </Route>
+
+      <Route path="/busquedas/" exact={false}>
+        <Busquedas/>
       </Route>
 
       <Route path="/puntos">
-        <Puntos></Puntos>
+        <Puntos/>
       </Route>
       
-      <Route path="/details">
-        <Details></Details>
+      <Route path="/details/:id">
+        <Details/>
       </Route>
 
       <Route path="/login">
@@ -39,13 +48,14 @@ function App() {
       </Route>
 
       <Route path="/reservas">
-        <Reservas></Reservas>
+        <Reservas/>
       </Route>
 
       <Route path="/">
-        <Principal></Principal>
+        <Principal/>
       </Route>
       
+
     </Switch>
 
   </Router>
